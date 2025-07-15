@@ -33,15 +33,50 @@ docker-compose up -d
 
 ## 🛠️ Usage Guide
 
-### ✅ Create the Extension
+### ✅ Connect to PostgreSQL CLI Inside Docker
 
-Run this in Adminer or psql:
+```bash
+docker exec -it pgvector-db psql -U postgres -d vector_db
+```
+
+### ✅ Check if pgvector Extension is Enabled
+
+Run inside `psql`:
+
+```sql
+SELECT * FROM pg_extension WHERE extname = 'vector';
+```
+
+If no rows appear, enable it manually:
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS vector;
 ```
 
-### ✅ Create a Table with Vector Column
+> **Note:** The extension is automatically enabled via Docker init for the default `vector_db` database.
+
+
+## ➕ Enabling pgvector for a New Database
+
+### 1️⃣ Create a New Database
+
+```sql
+CREATE DATABASE new_db;
+```
+
+### 2️⃣ Connect to the New Database
+
+```bash
+docker exec -it pgvector-db psql -U postgres -d new_db
+```
+
+### 3️⃣ Enable pgvector Extension in New Database
+
+```sql
+CREATE EXTENSION IF NOT EXISTS vector;
+```
+
+## ✅ Create a Table with Vector Column
 
 Example:
 
